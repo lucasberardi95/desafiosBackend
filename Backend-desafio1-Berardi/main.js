@@ -6,7 +6,7 @@ class ProductManager {
     addProduct(title, description, price, thumbnail, code, stock) {
         //Validar que todos los campos sean obligatorios
         if (!title || !description || !price || !thumbnail || !code || !stock) {
-            return console.log('Todos los campos son obligatorios');
+            console.error('Todos los campos son obligatorios');
         //Validar que no se repita el code
         } else if(this.products.some((product)=> product.code === code)) {
             console.error('Product code already loaded');
@@ -42,3 +42,10 @@ const manager = new ProductManager()
 
 manager.getProducts()
 manager.addProduct('Producto prueba', 'Este es un producto prueba', 200, 'Sin imagen', 'abc123', 25)
+manager.getProducts()
+manager.addProduct('Producto prueba', 'Este es un producto prueba', 200, 'Sin imagen', 'abc123', 25)
+manager.getProducts()
+manager.addProduct('Producto prueba', 'Este es un producto prueba', 200, 'Sin imagen', 'abc123', 25)
+
+
+manager.getProdcutById(1)
