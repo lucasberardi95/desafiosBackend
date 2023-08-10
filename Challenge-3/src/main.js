@@ -8,7 +8,7 @@ export class ProductManager {
     addProduct = async (product) => {
         const products = JSON.parse(await fs.readFile(this.path, 'utf-8'))
         if (products.some(prod => prod.code === product.code)) {
-            return 'Product already loaded'
+            console.log('Product already loaded')
         } else {
             products.push(product)
             await fs.writeFile(this.path, JSON.stringify(products))
@@ -28,7 +28,7 @@ export class ProductManager {
         if (prod) {
             return prod
         } else {
-            return 'Id Product not found'
+            console.log('Id Product not found')
         }
     }
 
@@ -49,7 +49,7 @@ export class ProductManager {
             }
             await fs.writeFile(this.path, JSON.stringify(products))
         } else {
-            return 'Id Product not found'
+            console.log('Id Product not found')
         }
     }
 
@@ -77,17 +77,17 @@ class Product {
     }
 }
 
-const manager = new ProductManager('./products.txt')
-const product1 = new Product('Test Product', 'This is a test product', 200, 'Without image', 'abc123', 25)
-const product2 = new Product('Test Product', 'This is a test product', 200, 'Without image', 'abc1234', 25)
+const manager = new ProductManager('./src/products.txt')
+const product1 = new Product('Test Product', 'This is a test product', 200, 'Without image', 'abc1', 25)
+const product2 = new Product('Test Product', 'This is a test product', 200, 'Without image', 'abc2', 25)
+const product3 = new Product('Test Product', 'This is a test product', 200, 'Without image', 'abc3', 25)
 
 const methods = async () => {
     //await manager.addProduct(product1)
-    //await manager.addProduct(product2)
     //await manager.getProducts()
     //await manager.getProductById(1)
     //await manager.updateProduct(1, { title: 'Rice', description: 'Rich', price: 1200, thumbnail: 'Image1', code: '1234', stock: 99 })
-    await manager.deleteProduct(1)
+    //await manager.deleteProduct(3)
 }
 
 methods()

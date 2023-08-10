@@ -2,7 +2,7 @@ import { ProductManager } from './main.js'
 
 import express from 'express'
 
-const manager = new ProductManager('./products.txt')
+const manager = new ProductManager('./src/products.txt')
 const app = express()
 const PORT = 4000
 
@@ -14,10 +14,12 @@ app.get('/', async (req,res)=>{
 
 app.get('/products', async (req, res)=>{
     const {limit} = req.query
-    const prods = manager.getProducts()
-    if (limit)
-        res.send(products.slice(0, limit))
+    const prods = await manager.getProducts()
+    if (limit){
+        res.send(prods.slice(0, limit))
+    } else {
     res.send(prods)
+    }
 }) 
 
 app.get('/products/:id', async (req, res) => {
