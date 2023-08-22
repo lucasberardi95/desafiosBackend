@@ -86,7 +86,7 @@ const methods = async () => {
     //await manager.addProduct(product1)
     //await manager.getProducts()
     //await manager.getProductById(1)
-    //await manager.updateProduct(1, { title: 'Rice', description: 'Rich', price: 1200, thumbnail: 'Image1', code: '1234', stock: 99 })
+    await manager.updateProduct(1, { title: 'Rice', description: 'Rich', price: 1200, thumbnail: 'Image1', code: '1234', stock: 99 })
     //await manager.deleteProduct(3)
 }
 
