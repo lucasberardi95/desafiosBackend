@@ -1,0 +1,8 @@
+body{
+    background-color: lightskyblue;
+    padding: 10px;
+}
+
+label, input{
+    display: block;
+}

@@ -1,0 +1,12 @@
+<h1>Hi {{usuario.nombre}}</h1>
+
+{{#if isTutor}}
+{{#each cursos}}
+<div>
+    <p>{{this.numCurso}} {{this.dias}} {{this.horario}}</p>
+</div>
+{{/each}}
+<p>Sos tutor/a</p>
+{{else}}
+<p>No sos tutor/a</p>
+{{/if}}
