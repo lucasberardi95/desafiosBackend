@@ -44,6 +44,8 @@ const sendUpdatedProductList = async () => {
     io.emit('productListUpdated', products)
 }
 
+const products = await productManager.getProducts()
+
 //Conexion de Socket.io
 io.on('connection', (socket)=>{
     console.log('Socket.io connection')
@@ -80,6 +82,7 @@ app.get('/static', (req, res) =>{
 })
 app.get('/index', (req, res) =>{
     res.render('index', {
-        rutaJS: 'index.js'
+        rutaJS: 'index.js',
+        products
     })
 })

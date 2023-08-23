@@ -16,4 +16,21 @@ form.addEventListener('submit', (e)=>{
     e.target.reset()
 })
 
-    
+    // Escuchar el evento de actualización de la lista de productos
+    socket.on('productListUpdated', (products) => {
+        const productList = document.querySelector('#realTimeProducts')
+        productList.innerHTML = ''
+
+        products.forEach((product) => {
+            const li = document.createElement('li')
+            li.textContent = `  title: ${product.title} - 
+                                desccription: ${product.description} -
+                                code: ${product.code} -
+                                price: ${product.price} -
+                                status: ${product.status} -
+                                stock: ${product.stock} -
+                                category: ${product.category}
+                            `
+            productList.appendChild(li)
+        })
+    })

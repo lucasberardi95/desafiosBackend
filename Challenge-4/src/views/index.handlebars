@@ -9,31 +9,9 @@
     <h1>Product List</h1>
     <ul>
         {{#each products}}
-            <li>{{this.title}} - {{this.price}}</li>
+            <li>Title: {{this.title}} -
+                Price: {{this.price}}</li>
         {{/each}}
     </ul>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io()
-        
-        // Escuchar el evento de actualización de la lista de productos
-        socket.on('productListUpdated', (products) => {
-            const productList = document.querySelector('ul')
-            productList.innerHTML = ''
-
-            products.forEach((product) => {
-                const li = document.createElement('li')
-                li.textContent = `  ${product.title} - 
-                                    ${product.description} -
-                                    ${product.code} -
-                                    ${product.price} -
-                                    ${product.status} -
-                                    ${product.stock} -
-                                    ${product.category}
-                                `
-                productList.appendChild(li)
-            })
-        })
-    </script>
 </body>
 </html>

@@ -1,25 +1,27 @@
 <h1>Create new product</h1>
 <form id="formProduct" action="/add-product" method="POST">
     <label for="title">Title</label>
-    <input type="text" name="title" required>
+    <input type="text" id="title" name="title" required>
 
     <label for="description">Description</label>
-    <input type="text" name="description" required>
+    <input type="text" id="description" name="description" required>
 
     <label for="code">Code</label>
-    <input type="text" name="code" required>
+    <input type="text" id="code" name="code" required>
 
     <label for="price">Price</label>
-    <input type="number" name="price" required>
+    <input type="number" id="price" name="price" required>
 
     <label for="status">Status</label>
-    <input type="string" name="status" required>
+    <input type="string" id="status" name="status" required>
 
     <label for="stock">Stock</label>
-    <input type="number" name="stock" required>
+    <input type="number" id="stock" name="stock" required>
 
     <label for="category">Category</label>
-    <input type="text" name="category" required>
+    <input type="text" id="category" name="category" required>
 
     <button type="submit">Create product</button>
 </form>
+
+<div id="realTimeProducts"></div>
