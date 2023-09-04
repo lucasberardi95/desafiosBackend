@@ -33,4 +33,4 @@ const productSchema = new Schema({
     thumbnails: []
 })
 
-export default productModel = model('products', productSchema)
+export const productModel = model('products', productSchema)
