@@ -39,7 +39,7 @@ productRouter.post('/', async (req,res)=>{
     }
 })
 
-productRouter.update('/:id', async (req,res)=>{
+productRouter.put('/:id', async (req,res)=>{
     const {id} = req.params
     const {title, description, stock, price, code, category, status} = req.body
     try {
