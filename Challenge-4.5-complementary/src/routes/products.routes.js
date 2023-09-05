@@ -44,7 +44,7 @@ productRouter.put('/:id', async (req,res)=>{
     const {title, description, stock, price, code, category, status} = req.body
     try {
         const response = await productModel.findByIdAndUpdate(id, {title, description, stock, price, code, category, status})
-        if(prod){
+        if(response){
             res.status(200).send({result: 'OK', message: response})
         } else{
         res.status(404).send({result: 'Product id not found', message: response})
@@ -57,8 +57,8 @@ productRouter.put('/:id', async (req,res)=>{
 productRouter.delete('/:id', async (req,res)=>{
     const {id} = req.params
     try {
-        const response = await productModel.deleteOne(id)
-        if(prod){
+        const response = await productModel.deleteOne({_id: id})
+        if(response){
             res.status(200).send({result: 'OK', message: response})
         } else{
         res.status(404).send({result: 'Product id not found', message: response})
