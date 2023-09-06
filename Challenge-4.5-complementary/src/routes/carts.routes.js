@@ -1,5 +1,7 @@
-import { Router } from "express";
-import cartModel from "../models/carts.models.js";
+import { Router } from "express"
+import cartModel from "../models/carts.models.js"
+import productModel from "../models/products.models.js"
+import mongoose from "mongoose"
 
 const cartRouter = Router()
 
@@ -32,6 +34,34 @@ cartRouter.post('/', async (req, res) => {
         res.status(400).send({error: `Cart already exist: ${error}`})
     }
     
+})
+
+cartRouter.put('/:cid/product/:pid', async (req, res) => {
+    const { cid, pid } = req.params
+    try {
+        const cartId = await cartModel.findById(cid)
+        if (cartId) {
+            const productId = await productModel.findById(pid)
+            if (!productId) {
+                res.status(404).send({ result: 'Id product Not Found', message: productId })
+                return
+            }
+        const existingProduct = cartId.products.find(prod => prod.id_prod == pid)
+            if (existingProduct) {
+            existingProduct.quantity++
+            } else {
+            cartId.products.push({ id_prod: productId._id, quantity: 1 })
+            }
+
+            //Save cart changes in mongoDB
+            await cartId.save()
+            res.status(200).send({ result: 'OK', message: cartId })
+        } else {
+            res.status(404).send({ result: 'Id cart Not Found', message: cartId })
+        }
+    } catch (error) {
+        res.status(400).send({ error: `Error adding product: ${error}` })
+    }
 })
 
 cartRouter.delete('/:id', async (req, res) => {
