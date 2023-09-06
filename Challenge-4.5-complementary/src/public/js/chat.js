@@ -6,14 +6,20 @@ const inputValues = document.getElementById('chatBox')
 let user
 
 Swal.fire({
-    title: 'User id',
-    text: 'Please enter your username',
+    title: 'User email',
+    text: 'Please enter your email',
     input: 'text',
-    inputValidator: (value)=>{
-        return !value && 'Enter a valid username'
+    inputValidator: (value) => {
+        if (!value) {
+            return 'Enter a valid email'
+        }
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+        if (!emailRegex.test(value)) {
+            return 'Enter a valid email'
+        }
     },
     allowOutsideClick: false
-}).then(result =>{
+}).then((result) => {
     user = result.value
     console.log(user)
 })

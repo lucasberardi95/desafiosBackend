@@ -22,11 +22,8 @@ const io = new Server(server)
 io.on('connection', (socket)=>{
     console.log('Socket.io connection')
     socket.on('message', async info =>{
-        const {email, message} = info
-        await messageModel.create({
-            email,
-            message
-        })
+        //const {email, message} = info
+        await messageModel.create(info)
         const messages = await messageModel.find()
         io.emit('messages', messages)
     })
