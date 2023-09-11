@@ -7,7 +7,7 @@ import mongoose from "mongoose"
 import productRouter from "./routes/products.routes.js"
 import cartRouter from "./routes/carts.routes.js"
 import messageRouter from "./routes/messages.routes.js"
-import messageModel from "./models/messages.models.js"
+import { messagesSocketController } from "./controllers/sockets/messagesSocketController.js"
 
 const app = express()
 const PORT = 4000
@@ -21,12 +21,7 @@ const io = new Server(server)
 //Conexion de Socket.io
 io.on('connection', (socket)=>{
     console.log('Socket.io connection')
-    socket.on('message', async info =>{
-        //const {email, message} = info
-        await messageModel.create(info)
-        const messages = await messageModel.find()
-        io.emit('messages', messages)
-    })
+    socket.on('message', (info)=> messagesSocketController(io, info))
 })
 
 //MongoDB Atlas connection
