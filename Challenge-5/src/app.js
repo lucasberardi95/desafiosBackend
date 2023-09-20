@@ -111,14 +111,14 @@ app.use('/api/messages', messageRouter)
 app.use('/api/users', userRouter)
 app.use('/api/sessions', sessionRouter)
 
-app.get('/static', (req, res) => {
+app.get('/static/chat', (req, res) => {
     res.render('chat', {
         rutaCSS: 'chat',
         rutaJS: 'chat',
     })
 })
 
-app.get('/products', async (req, res) =>{
+app.get('/static/products', async (req, res) =>{
     const products = productModel.find().lean()
     const info = req.query.info
     res.render('products', {
@@ -129,21 +129,21 @@ app.get('/products', async (req, res) =>{
     })
 })
 
-app.get('/signin', (req, res) =>{
+app.get('/static/signin', (req, res) =>{
     res.render('signin', {
         rutaCSS: 'signin',
         rutaJS: 'signin',
     })
 })
 
-app.get('/login', (req, res) =>{
+app.get('/static/login', (req, res) =>{
     res.render('login', {
         rutaCSS: 'login',
         rutaJS: 'login',
     })
 })
 
-app.get('/logout', (req, res) =>{
+app.get('/static/logout', (req, res) =>{
     res.render('logout', {
         rutaCSS: 'logout',
         rutaJS: 'logout',
