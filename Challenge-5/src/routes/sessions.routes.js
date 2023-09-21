@@ -12,6 +12,10 @@ sessionRouter.post('/login', async (req, res) => {
         const user = await userModel.findOne({ email: email })
         if (user) {
             req.session.username = user.first_name
+            if (user.email == 'adminCoder@coder.com' && password == '1234') {
+                console.log('You are admin')
+                req.session.role = 'admin'
+            }
             if (user.password == password) {
                 req.session.login = true
                 res.redirect(`/static/products?info=${user.first_name}`) //Redirect
