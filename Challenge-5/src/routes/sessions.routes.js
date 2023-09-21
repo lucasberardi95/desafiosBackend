@@ -13,7 +13,7 @@ sessionRouter.post('/login', async (req, res) => {
         if (user) {
             if (user.password == password) {
                 req.session.login = true
-                res.redirect('/products', 200, {'info': `Welcome ${user.first_name}`}) //Redireccion
+                res.redirect(`/static/products?info=${email}`) //Redirect
             } else {
                 res.status(401).send({ result: 'Unauthorized', message: user })
             }
@@ -29,8 +29,7 @@ sessionRouter.get('/logout', async (req, res) => {
     if(req.session.login){
         req.session.destroy()
     }
-    res.status(200).send({result: 'Deleted login'})
-    res.redirect('/login', 200, {'info': 'LOGIN'}) //Redireccion
+    res.redirect(`/static/login?info=login`) //Redirect
 })
 
 export default sessionRouter
