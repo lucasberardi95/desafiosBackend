@@ -11,9 +11,10 @@ sessionRouter.post('/login', async (req, res) => {
             res.status(200).send({ result: 'Existing login' })
         const user = await userModel.findOne({ email: email })
         if (user) {
+            req.session.username = user.first_name
             if (user.password == password) {
                 req.session.login = true
-                res.redirect('/products', 200, {'info': `Welcome ${user.first_name}`}) //Redireccion
+                res.redirect(`/static/products?info=${user.first_name}`) //Redirect
             } else {
                 res.status(401).send({ result: 'Unauthorized', message: user })
             }
@@ -29,8 +30,7 @@ sessionRouter.get('/logout', async (req, res) => {
     if(req.session.login){
         req.session.destroy()
     }
-    res.status(200).send({result: 'Deleted login'})
-    res.redirect('/login', 200, {'info': 'LOGIN'}) //Redireccion
+    res.redirect(`/static/login`) //Redirect
 })
 
 export default sessionRouter
