@@ -56,7 +56,7 @@ app.use(session({ //Configuracion de la sesion de mi app
     saveUninitialized: true
 }))
 
-function auth (req, res, next){
+/* function auth (req, res, next){
     console.log(req.session.email)
     if (req.session.email == 'admin@admin.com' && pasword == '1234') {
         return next() //Continua con la ejecucion normal de la ruta
@@ -101,7 +101,7 @@ app.get('/logout', (req, res)=>{
             res.send('Logged out')            
         }
     })
-})
+}) */
 
 //Routes
 app.use('/static', express.static(path.join(__dirname, '/public')))
@@ -119,7 +119,7 @@ app.get('/static/chat', (req, res) => {
 })
 
 app.get('/static/products', async (req, res) =>{
-    const products = productModel.find().lean()
+    const products = await productModel.find().lean()
     const info = req.query.info
     res.render('products', {
         rutaCSS: 'products',
