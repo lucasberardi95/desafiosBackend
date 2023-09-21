@@ -1,5 +1,9 @@
 <h1>Products</h1>
 
+{{#if username}}
+    <h2>Welcome {{username}}</h2>
+{{/if}}
+
 <ul>
     {{#each products}}
     <li>
@@ -9,4 +13,6 @@
     </li>
     {{/each}}
 </ul>
-<button id="ButtonLogOut">Log out</button>
+<form action="/api/sessions/logout" method="get">
+<button id="buttonLogOut" type="submit">Log out</button>
+</form>
