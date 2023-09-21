@@ -119,7 +119,7 @@ app.get('/static/chat', (req, res) => {
 })
 
 app.get('/static/products', async (req, res) =>{
-    const products = productModel.find().lean()
+    const products = await productModel.find().lean()
     const info = req.query.info
     res.render('products', {
         rutaCSS: 'products',
