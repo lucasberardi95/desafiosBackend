@@ -9,13 +9,13 @@ import cartRouter from "./routes/carts.routes.js"
 import messageRouter from "./routes/messages.routes.js"
 import userRouter from './routes/users.routes.js'
 import sessionRouter from './routes/sessions.routes.js'
+import viewRouter from './routes/views.routes.js'
 import { messagesSocketController } from "./controllers/sockets/messagesSocketController.js"
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 //import FileStorage from 'session-file-store'
 import MongoStore from 'connect-mongo'
 import mongoose from 'mongoose'
-import productModel from './models/products.models.js'
 
 const app = express()
 //const fileStorage = FileStorage(session)
@@ -110,45 +110,7 @@ app.use('/api/carts', cartRouter)
 app.use('/api/messages', messageRouter)
 app.use('/api/users', userRouter)
 app.use('/api/sessions', sessionRouter)
-
-app.get('/static/chat', (req, res) => {
-    res.render('chat', {
-        rutaCSS: 'chat',
-        rutaJS: 'chat',
-    })
-})
-
-app.get('/static/products', async (req, res) =>{
-    const products = await productModel.find().lean()
-    const info = req.query.info
-    res.render('products', {
-        rutaCSS: 'products',
-        rutaJS: 'products',
-        products,
-        info,
-    })
-})
-
-app.get('/static/signin', (req, res) =>{
-    res.render('signin', {
-        rutaCSS: 'signin',
-        rutaJS: 'signin',
-    })
-})
-
-app.get('/static/login', (req, res) =>{
-    res.render('login', {
-        rutaCSS: 'login',
-        rutaJS: 'login',
-    })
-})
-
-app.get('/static/logout', (req, res) =>{
-    res.render('logout', {
-        rutaCSS: 'logout',
-        rutaJS: 'logout',
-    })
-})
+app.use('/', viewRouter)
 
 //HBS configuration
 app.engine('handlebars', engine())
