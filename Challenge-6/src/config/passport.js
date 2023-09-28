@@ -46,7 +46,7 @@ const initializePassport = () => {
             console.log(refreshToken)
             const user = await userModel.findOne({ email: profile._json.email })
             if (user) {
-                done(null, false)
+                done(null, user)
             } else {
                 const userCreated = await userModel.create({
                     first_name: profile._json.name,
@@ -66,13 +66,13 @@ const initializePassport = () => {
         try {
             const user = await userModel.findOne({ email: username })
             if (!user) {
-                done(null, false)
+                done(null, false, {message: 'User not found'})//Usuario no encontrado
             }
             if (validatePassword(password, user.password)) {
-                return done(null, user)//Usuario y contrasena valida
+                return done(null, user)//Usuario y contrasena validos
             }
             //Else -> Contrasena no validas
-            return done(null, false)
+            return done(null, false, {message: 'Invalid password'})//Contrasena invalida
         } catch (error) {
             return done(error)
         }

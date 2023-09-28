@@ -33,7 +33,10 @@ const sessionRouter = Router()
 sessionRouter.post('/login', passport.authenticate('login'), async (req, res) => {
     try {
         if (!req.user) {
-            return res.status(401).send({ message: `Invalidate password` })
+            if (req.authInfo && req.authInfo.message) {
+                return res.status(401).send({ message: req.authInfo.message })
+            }
+            return res.status(401).send({ message: `Authentication failed` })
         }
 
         req.session.user = {
@@ -42,14 +45,15 @@ sessionRouter.post('/login', passport.authenticate('login'), async (req, res) =>
             age: req.user.age,
             email: req.user.email
         }
-        res.status(200).send({ payload: req.user })
+        res.redirect(`/static/products?info=${req.user.first_name}`) //Redirect
+        //res.status(200).send({ payload: req.user })
     } catch (error) {
         res.status(500).send({ message: `Failed to login: ${error}` })
     }
 })
 
 sessionRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }), async (req, res) => {
-    res.status(200).send({ message: 'User created' })
+    res.status(200).send({ payload: req.user })
 })
 
 sessionRouter.get('/githubSession', passport.authenticate('github'), async (req, res) => {
