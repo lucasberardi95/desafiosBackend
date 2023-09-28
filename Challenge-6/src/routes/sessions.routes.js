@@ -62,7 +62,7 @@ sessionRouter.get('/githubSession', passport.authenticate('github'), async (req,
 })
 
 sessionRouter.get('/logout', async (req, res) => {
-    if (req.session.login) {
+    if (req.session) {
         req.session.destroy()
     }
     res.redirect(`/static/login`) //Redirect
