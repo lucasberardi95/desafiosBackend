@@ -32,7 +32,7 @@ userRouter.post('/signin', passport.authenticate('register'), async (req, res)=>
         if(!req.user){
         return res.status(400).send({message: 'Existing user'})
         }
-        res.redirect(`/static/products?info=${req.user.first_name}`) //Redirect
+        res.redirect(`/static/login`) //Redirect
         //res.status(200).send({message: 'Created user'})
     } catch (error) {
         res.status(500).send({message: `Error creating user: ${error}`})
