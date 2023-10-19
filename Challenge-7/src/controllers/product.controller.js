@@ -18,7 +18,6 @@ export const getProducts = async (req, res) => {
             ...(status ? { status } : {}),
         }
         const prods = await productModel.paginate(query, options)
-        res.status(200).send({ result: 'OK', message: prods })
         if (prods) {
             return res.status(200).send(prods)
         } else {

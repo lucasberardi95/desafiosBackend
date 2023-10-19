@@ -11,7 +11,7 @@ export const generateToken = (user) => {
     return token
 }
 
-console.log(generateToken({"_id":"6515036a799664f8d35dbefa","first_name":"lucas","last_name":"lucas","email":"lucas@lucas.com","password":"$2b$15$waUn9Jt.CKQF3l/D3CPtw.e4q6YDKy97A5UtuRQ2tSjP8GwPBAo1q","role":"user","age":{"$numberInt":"1234"}}))
+console.log(generateToken({"_id":"650c73104ca5bbf04286eaae","first_name":"Coder","last_name":"House","email":"adminCoder@coder.com","password":"1234","role":"admin","age":{"$numberInt":"1234"}}))
 
 export const authToken = (req, res, next) => {
     //Consult header
