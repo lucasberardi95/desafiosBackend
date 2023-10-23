@@ -1,30 +1,30 @@
 import { Router } from "express"
-import { deleteProdOnCart, emptyCart, getCart, getCarts, postCart, putCartWithProdsArray, putProdQty, putProductToCart } from "../controllers/cart.controller.js"
+import * as cartController from "../controllers/cart.controller.js"
 
 const cartRouter = Router()
 
 //Get all carts
-cartRouter.get('/', getCarts)
+cartRouter.get('/', cartController.getCarts)
 
 //Get cart by id
-cartRouter.get('/:id', getCart)
+cartRouter.get('/:id', cartController.getCart)
 
 //Create new cart
-cartRouter.post('/', postCart)
+cartRouter.post('/', cartController.postCart)
 
 //Put cart with products array
-cartRouter.put('/:cid', putCartWithProdsArray)
+cartRouter.put('/:cid', cartController.putCartWithProdsArray)
 
 //Add product to cart
-cartRouter.put('/:cid/product/:pid', putProductToCart)
+cartRouter.put('/:cid/product/:pid', cartController.putProductToCart)
 
 //Put quantity of products on cart
-cartRouter.put('/:cid/products/:pid', putProdQty)
+cartRouter.put('/:cid/products/:pid', cartController.putProdQty)
 
 //Delete product on cart by id
-cartRouter.delete('/:cid/products/:pid', deleteProdOnCart)
+cartRouter.delete('/:cid/products/:pid', cartController.deleteProdOnCart)
 
 //Empty cart
-cartRouter.delete('/:id', emptyCart)
+cartRouter.delete('/:id', cartController.emptyCart)
 
 export default cartRouter
