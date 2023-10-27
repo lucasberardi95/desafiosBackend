@@ -14,9 +14,9 @@ productRouter.get('/:id', prodController.getProduct)
 productRouter.post('/', passportError('jwt'), authorization('admin'), prodController.postProduct)
 
 //Put product
-productRouter.put('/:id', prodController.putProduct)
+productRouter.put('/:id', passportError('jwt'), authorization('admin'), prodController.putProduct)
 
 //Delete product by id
-productRouter.delete('/:id', prodController.deleteProducts)
+productRouter.delete('/:id', passportError('jwt'), authorization('admin'), prodController.deleteProducts)
 
 export default productRouter
