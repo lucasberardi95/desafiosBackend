@@ -22,7 +22,7 @@ export const logger = winston.createLogger({
                     winston.format.simple()
             )
         }),
-        new winston.transports.File({ filename: './errors.log', level: 'warn' })
+        new winston.transports.File({ filename: '/Challenge-9/src/logs/errors.log', level: 'warn' })
     ]
 })
 

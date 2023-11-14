@@ -12,6 +12,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import initializePassport from "./config/passport.js";
+import { logger, addLogger } from "./utils/logger.js";
 
 //IMPORTING ERRORS MIDDLEWARE
 import errorMiddleware from "./middlewares/index.js";
@@ -21,7 +22,7 @@ const PORT = 4000;
 
 //Server
 const server = app.listen(PORT, () => {
-    console.log(`Server on port ${PORT}`);
+    logger.info(`Server on port ${PORT}`);
 });
 const io = new Server(server);
 
@@ -35,7 +36,7 @@ io.on("connection", (socket) => {
 mongoose
     .connect(process.env.MONGO_URL)
     .then(async () => {
-        console.log("MongoDB connected");
+        logger.info("MongoDB connected");
     })
     .catch((error) => console.log(`Error connecting to MongoDB Atlas: ${error}`));
 
@@ -60,6 +61,7 @@ app.use(
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(addLogger)
 
 //Routes
 app.use("/static", express.static(path.join(__dirname, "/public")));
