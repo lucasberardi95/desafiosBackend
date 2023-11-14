@@ -61,12 +61,12 @@ app.use(
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(addLogger)
 
 //Routes
 app.use("/static", express.static(path.join(__dirname, "/public")));
 app.use("/", router);
 app.use(errorMiddleware); // <- Usamos el middleware DESPUES de la ruta / sino no podemos usar los next
+app.use(addLogger)
 
 //HBS configuration
 app.engine("handlebars", engine());
