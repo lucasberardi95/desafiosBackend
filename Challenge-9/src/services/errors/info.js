@@ -14,5 +14,7 @@ export const generateUserErrorInfo = (user) => {
     List of required propierties:
     * first_name : needs to be a String, received ${user.first_name}
     * last_name  : needs to be a String, received ${user.last_name}
-    * email      : needs to be a String, received ${user.email}`
+    * email      : needs to be a String, received ${user.email}
+    * password   : needs to be a String, received ${user.password}
+    * age        : needs to be a Number, received ${user.age}`
 }

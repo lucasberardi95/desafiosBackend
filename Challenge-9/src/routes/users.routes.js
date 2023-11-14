@@ -9,12 +9,12 @@ const userRouter = Router()
 
 //Signin new user
 userRouter.post('/signin', (req, res, next) => {
-    const { first_name, last_name, email } = req.body
+    const { first_name, last_name, email, password, age } = req.body
     try {
-        if (!last_name || !first_name || !email) {
+        if (!last_name || !first_name || !email || !password || !age) {
             CustomError.createError({
                 name: 'Error creating user',
-                cause: generateUserErrorInfo({ first_name, last_name, email }),
+                cause: generateUserErrorInfo({ first_name, last_name, email, password, age }),
                 message: 'All fields must be completed',
                 code: EErrors.USER_ERROR
             })
