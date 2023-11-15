@@ -6,11 +6,13 @@ import routerMock from "./mocking.routes.js"
 import userRouter from './users.routes.js'
 import sessionRouter from './sessions.routes.js'
 import viewRouter from "./views.routes.js"
+import loggerRouter from "./loggers.routes.js"
 
 const router = Router()
 
 router.use('/api/products', productRouter)
 router.use('/api/carts', cartRouter)
+router.use('/api/loggers', loggerRouter)
 router.use('/api/messages', messageRouter)
 router.use('/api/mockingproducts', routerMock)
 router.use('/api/users', userRouter)

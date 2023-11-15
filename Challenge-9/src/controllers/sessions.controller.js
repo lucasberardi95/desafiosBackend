@@ -1,4 +1,5 @@
 import { generateToken } from "../utils/jwt.js"
+import { logger } from "../utils/logger.js"
 
 export const login = async (req, res) => {
     try {
@@ -21,6 +22,7 @@ export const login = async (req, res) => {
         res.redirect(`/static/products?info=${req.user.first_name}`) //Redirect
         //res.status(200).send({ payload: req.user })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(500).send({ message: `Failed to login: ${error}` })
     }
 }

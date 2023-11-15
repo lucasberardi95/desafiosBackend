@@ -4,6 +4,7 @@ import GithubStrategy from 'passport-github2'
 import jwt from 'passport-jwt'
 import { createHash, validatePassword } from '../utils/bcrypt.js'
 import { userModel } from '../models/users.models.js'
+import { logger } from '../utils/logger.js'
 
 //Define strategy to use
 const localStrategy = local.Strategy
@@ -17,7 +18,6 @@ const initializePassport = () => {
         //If i get {} means there is No cookies != my cookie doesn't exists
         //If cookies exist, check for my cookie and if not, assign {}
         const token = req.cookies ? req.cookies.jwtCookie : {}
-        console.log(token)
         return token
     }
     //JTW
@@ -29,6 +29,7 @@ const initializePassport = () => {
             console.log(jwt_payload);
             return done(null, jwt_payload) //Return token content
         } catch (error) {
+            logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
             return done(error)
         }
     }))
@@ -53,9 +54,10 @@ const initializePassport = () => {
                     age: age,
                     password: passwordHash
                 })
-                console.log(userCreated)
+                logger.info(userCreated)
                 return done(null, userCreated)
             } catch (error) {
+                logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
                 return done(error)
             }
         }
@@ -84,6 +86,7 @@ const initializePassport = () => {
 
             }
         } catch (error) {
+            logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
             done(error)
         }
     }))
@@ -100,6 +103,7 @@ const initializePassport = () => {
             //Else -> Contrasena no validas
             return done(null, false, { message: 'Invalid password' })//Contrasena invalida
         } catch (error) {
+            logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
             return done(error)
         }
     }))

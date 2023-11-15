@@ -3,12 +3,14 @@ import productModel from "../models/products.models.js"
 import ticketModel from "../models/ticket.models.js"
 import { userModel } from "../models/users.models.js"
 import mongoose from "mongoose"
+import { logger } from "../utils/logger.js"
 
 export const getCarts = async (req, res) => {
     try {
         const carts = await cartModel.find()
         res.status(200).send({ result: 'OK', message: carts })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Error displaying carts:  ${error}` })
 
     }
@@ -20,6 +22,7 @@ export const getCart = async (req, res) => {
         const cart = await cartModel.findById(id)
         res.status(200).send({ result: 'OK', message: cart })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Id cart not found:  ${error}` })
     }
 }
@@ -29,6 +32,7 @@ export const postCart = async (req, res) => {
     try {
         res.status(200).send({ result: 'OK', message: response })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Cart already exist: ${error}` })
     }
 }
@@ -54,6 +58,7 @@ export const putCartWithProdsArray = async (req, res) => {
         await cart.save()
         res.status(200).send({ result: 'OK', cart })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(200).send({ error: `Error updating cart: ${error}` })
     }
 }
@@ -69,6 +74,7 @@ export const putProductToCart = async (req, res) => {
             res.status(200).send({ result: 'OK', message: response })
         }
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Error adding product: ${error}` })
     }
 }
@@ -93,6 +99,7 @@ export const putProdQty = async (req, res) => {
         await cart.save()
         res.status(200).send({ result: 'OK', cart })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Error updating product qty: ${error}` })
     }
 }
@@ -116,6 +123,7 @@ export const deleteProdOnCart = async (req, res) => {
             res.status(404).send({ result: 'Cart Not Found', message: cart })
         }
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Error deleting product: ${error}` })
     }
 }
@@ -131,6 +139,7 @@ export const emptyCart = async (req, res) => {
         await cart.save()
         res.status(200).send({ result: 'OK', message: cart })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Error empitying cart: ${cart}` })
     }
 }
@@ -185,6 +194,7 @@ export const purchase = async (req, res) => {
         await cartModel.findByIdAndUpdate(cid, { products: [] })
         return res.status(200).send({ message: "Successful purchase" })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         return res.status(404).send({ error: `Error processing the purchase: ${error.message}` })
     }
 }

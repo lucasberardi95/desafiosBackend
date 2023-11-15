@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { logger } from '../utils/logger.js'
 
 export const createProduct = async (req, res) => {
     try {
@@ -22,6 +23,7 @@ export const createProduct = async (req, res) => {
         console.log(products)
         return res.status(200).send({ result: 'OK', message: products })
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(500).send({ error: `Error creating product:  ${error}` })
     }
 }

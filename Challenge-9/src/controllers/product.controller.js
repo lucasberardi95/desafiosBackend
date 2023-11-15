@@ -1,4 +1,5 @@
 import productModel from "../models/products.models.js"
+import { logger } from "../utils/logger.js"
 
 export const getProducts = async (req, res) => {
     let { limit, page, category, status, sort } = req.query
@@ -24,6 +25,7 @@ export const getProducts = async (req, res) => {
             res.status(404).send({ error: "Products not found" })
         }
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(500).send({ error: `Error displaying products:  ${error}` })
     }
 }
@@ -38,6 +40,7 @@ export const getProduct = async (req, res) => {
             res.status(404).send({ result: 'Product id not found', message: prod })
         }
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(500).send({ error: `Error displaying product:  ${error}` })
     }
 }
@@ -54,6 +57,7 @@ export const postProduct = async (req, res) => {
             res.status(404).send({ error: 'Product not found' })
         }
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         if (error.code == 11000) {
             return res.status(400).send({ error: `Duplicated key` })
         } else {
@@ -73,6 +77,7 @@ export const putProduct = async (req, res) => {
             res.status(404).send({ result: 'Product id not found', message: response })
         }
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(500).send({ error: `Error updating product:  ${error}` })
     }
 }
@@ -87,6 +92,7 @@ export const deleteProducts = async (req, res) => {
             res.status(404).send({ result: 'Product id not found', message: response })
         }
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(500).send({ error: `Error deleting product:  ${error}` })
     }
 }
