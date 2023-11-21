@@ -6,7 +6,7 @@ export const getLogs = async (req, res) => {
     //logger.verbose('This is a verbose log'),
     //logger.http('This is a http log'),
     logger.info('This is a info log'),
-    logger.warn('This is a warn log'),
+    logger.warning('This is a warning log'),
     logger.error('This is a error log'),
     logger.fatal('This is a fatal log')
     res.send('Logs added')

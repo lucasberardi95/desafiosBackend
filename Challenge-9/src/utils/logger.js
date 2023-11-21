@@ -1,22 +1,40 @@
-import winston from 'winston'
+import winston from 'winston';
+
+const customLevelsOptions = {
+	levels: {
+		fatal: 0,
+		error: 1,
+		warning: 2,
+		info: 3,
+		debug: 4,
+	},
+	colors: {
+		fatal: 'red',
+		error: 'yellow',
+		warning: 'black',
+		info: 'green',
+		debug: 'magenta',
+	},
+};
+
+winston.addColors(customLevelsOptions.colors);
 
 export const logger = winston.createLogger({
-    levels: {
-        fatal: 0,
-        error: 1,
-        warn: 2,
-        info: 3,
-        debug: 4
-    },
-    format: winston.format.simple(),
-    transports: [
-        new winston.transports.Console({ level: 'info'}),
-        new winston.transports.File({ filename: './src/logs/errors.log', level: 'warn' })
-    ]
-})
+	levels: customLevelsOptions.levels,
+	transports: [
+		new winston.transports.Console({
+			level: 'debug',
+			format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+		}),
+		new winston.transports.File({
+			filename: './logs/errors.log',
+			level: 'warning',
+		}),
+	],
+});
 
 export const addLogger = (req, res, next) => {
-    req.logger = logger,
-    req.logger.info(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
-    next()
-}
+	req.logger = logger;
+	req.logger.info(`Request ${req.method} - ${req.url} - Date: ${new Date().toLocaleString()}`);
+	next();
+};
