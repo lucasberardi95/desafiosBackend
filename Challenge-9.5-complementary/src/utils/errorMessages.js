@@ -17,17 +17,22 @@ export const passportError = (strategy) => {
     }
 }
 
-//I put a role and verify if my user fulfill it
-export const authorization = (role) => {
+// I put a role and verify if my user fulfills it
+export const authorization = (allowedRoles) => {
     return async (req, res, next) => {
         console.log(req.user)
-        //The token is queried again because it may expire, the user may delete the history or whatever
+        // The token is queried again because it may expire, the user may delete the history or whatever
         if (!req.user) {
-            return res.status(401).send({error: 'Unauthorized user'})
+            return res.status(401).send({ error: 'Unauthorized user' })
         }
-        if (req.user.user.role != role) {
-            return res.status(403).send({error: `The user doesn't have the necessary privileges`})
+
+        const userRole = req.user.user.role
+
+        // Check if the user's role is included in the list of allowed roles
+        if (allowedRoles.includes(userRole)) {
+            next() // Allow to continue with the next middleware or the route
+        } else {
+            res.status(403).send({ error: 'Forbidden', message: 'Unauthorized access' })
         }
-        next()
     }
 }

@@ -149,8 +149,9 @@ export const purchase = async (req, res) => {
     try {
         const cart = await cartModel.findById(cid)
         const products = await productModel.find()
-        const user = await userModel.find({ cart: cart._id})
+        const user = await userModel.find({ cart: cart._id })
         const purchaserEmail = user[0].email
+        const userRole = req.user.role || req.user.user.role
 
         if (!cart) {
             return res.status(404).send({ result: 'Cart not found', message: cart })
@@ -165,9 +166,20 @@ export const purchase = async (req, res) => {
             if (product.stock >= item.quantity) {
                 product.stock -= item.quantity
                 await product.save()
-                return { productId: product._id, quantity: item.quantity, price: product.price }
+
+                // Discount for user "premium"
+                let discount = 1.0;
+                if (userRole === 'premium') {
+                    discount = 0.8
+                }
+
+                return {
+                    productId: product._id,
+                    quantity: item.quantity,
+                    price: product.price * discount,
+                }
             }
-            return null // Retornar null si el producto no tiene suficiente stock
+            return null // Returns null if the product does not have enough stock
         })
 
         const results = await Promise.all(promises)
