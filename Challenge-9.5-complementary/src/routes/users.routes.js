@@ -6,7 +6,9 @@ import { EErrors } from "../services/errors/enums.js"
 import { generateUserErrorInfo } from "../services/errors/info.js"
 import { sendRecoveryEmail } from "../config/nodemailer.js"
 import crypto from 'crypto'
-import { log } from "console"
+import { logger } from "../utils/logger.js"
+import { createHash, validatePassword } from "../utils/bcrypt.js"
+
 
 const userRouter = Router()
 const recoveryLinks = {}
@@ -43,33 +45,49 @@ userRouter.post('/password-recovery', (req, res) => {
 
         res.status(200).send('Recovery email sent successfully')
     } catch (error) {
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(500).send('Error sending Recovery email', error)
     }
 })
 
-userRouter.post('/reset-password/:token', (req, res) => {
+userRouter.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params
     const { newPassword } = req.body
     try {
         //Token verification & expiration(1hr)
         const linkData = recoveryLinks[token]
-        if (linkData && Date.now() - linkData.timestamp <= 3600000) {
-            const { email } = linkData
-
-            console.log(`Email: ${email}`)
-            console.log(`New password: ${newPassword}`)
-            //Change password(Modify client)
-
-            //Check if the new password is the same as the old password
-
-            delete recoveryLinks[token]
-
-            res.status(200).send('Password changed successfully')
-        } else {
-            res.status(400).send('Invalid or expired token. Try again')
+        if (!linkData || Date.now() - linkData.timestamp > 3600000) {
+            logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - Expired or invalid token: ${token}`);
+            return res.status(400).send('Invalid or expired token. Try again');
         }
+
+        const { email } = linkData;
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+            logger.error(`User not found: ${email}`);
+            return res.status(400).send({ error: `User not found: ${email}` });
+        }
+
+        // Check if new password is the same as the old password
+        const isSamePassword = validatePassword(newPassword, user.password);
+        if (isSamePassword) {
+            logger.error(`The new password cannot be the same as the current password`);
+            return res.status(400).send({ error: `The new password cannot be the same as the current password` });
+        }
+
+        // Update user's password in the database
+        user.password = createHash(newPassword)
+        await user.save();
+
+        // Delete the recovery token
+        delete recoveryLinks[token]
+
+        logger.info(`[INFO] - Date: ${new Date().toLocaleTimeString()} - Password updated successfully for user: ${email}`);
+        res.status(200).send('Password changed successfully')
     } catch (error) {
-        res.status(500).send('Error changing password', error)
+        logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
+        res.status(500).send(`Error changing password: ${error}`)
     }
 })
 
