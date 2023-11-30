@@ -8,6 +8,7 @@ import { sendRecoveryEmail } from "../config/nodemailer.js"
 import crypto from 'crypto'
 import { logger } from "../utils/logger.js"
 import { createHash, validatePassword } from "../utils/bcrypt.js"
+import { userModel } from "../models/users.models.js"
 
 
 const userRouter = Router()
@@ -62,7 +63,7 @@ userRouter.post('/reset-password/:token', async (req, res) => {
         }
 
         const { email } = linkData;
-        const user = await UserModel.findOne({ email });
+        const user = await userModel.findOne({ email });
 
         if (!user) {
             logger.error(`User not found: ${email}`);
