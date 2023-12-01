@@ -1,0 +1,18 @@
+<h1>Products</h1>
+
+{{#if info}}
+    <h2>Welcome {{info}}</h2>
+{{/if}}
+
+<ul>
+    {{#each products}}
+    <li>
+        <h2>{{title}}</h2>
+        <p>Price: ${{price}}</p>
+        <p>Description: {{description}}</p>
+    </li>
+    {{/each}}
+</ul>
+<form action="/api/sessions/logout" method="get">
+<button id="buttonLogOut" type="submit">Log out</button>
+</form>
