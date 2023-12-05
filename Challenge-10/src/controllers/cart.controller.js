@@ -11,7 +11,7 @@ export const getCarts = async (req, res) => {
         res.status(200).send({ result: 'OK', message: carts })
     } catch (error) {
         logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
-        res.status(400).send({ error: `Error displaying carts:  ${error}` })
+        res.status(500).send({ error: `Error displaying carts:  ${error}` })
 
     }
 }
@@ -59,7 +59,7 @@ export const putCartWithProdsArray = async (req, res) => {
         res.status(200).send({ result: 'OK', cart })
     } catch (error) {
         logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
-        res.status(200).send({ error: `Error updating cart: ${error}` })
+        res.status(500).send({ error: `Error updating cart: ${error}` })
     }
 }
 

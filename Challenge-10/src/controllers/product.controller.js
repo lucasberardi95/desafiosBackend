@@ -54,7 +54,7 @@ export const postProduct = async (req, res) => {
         if (response) {
             return res.status(201).send({ result: 'OK', message: response })
         } else {
-            res.status(404).send({ error: 'Product not found' })
+            res.status(500).send({ error: 'Error creating product', message: 'Unable to create the product' });
         }
     } catch (error) {
         logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
