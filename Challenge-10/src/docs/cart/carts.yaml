@@ -1,0 +1,123 @@
+paths:
+  /api/carts/:
+    get:
+      summary: Get all carts
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Carts successfully obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/cart"
+        '400':
+          description: Error displaying carts
+    post:
+      summary: Create new cart
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Cart successfully created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/cart"
+        '400':
+          description: Cart already exists
+
+  /api/carts/{id}:
+    get:
+      summary: Get cart by id
+      tags:
+        - Carts by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Cart id
+      responses:
+        '200':
+          description: Cart successfully obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/cart"
+        '400':
+          description: Id cart not found
+    put:
+      summary: Put cart by id
+      tags:
+        - Carts by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Cart id
+      responses:
+        '200':
+          description: Cart updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/cart"
+        '400':
+          description: Error updating cart
+        '404':
+          description: Id cart not found
+    delete:
+      summary: Empty cart by id
+      tags:
+        - Carts by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Cart id
+      responses:
+        '200':
+          description: Cart emptied successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/cart"
+        '400':
+          description: Error emptying cart
+        '404':
+          description: Id cart not found
+
+components:
+  schemas:
+    cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Auto-generated mongodb ID
+        products:
+          type: Array
+          description: Products contained in the cart 
+      example:
+        _id: ObjectId('37856vg42355j23sd')
+        products:
+          0: Object
+          id_prod: ObjectId('6453k72754l')
+          quantity: 432
+          _id: ObjectId('6543k13465l43k')
