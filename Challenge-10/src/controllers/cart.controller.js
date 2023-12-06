@@ -23,14 +23,14 @@ export const getCart = async (req, res) => {
         res.status(200).send({ result: 'OK', message: cart })
     } catch (error) {
         logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
-        res.status(400).send({ error: `Id cart not found:  ${error}` })
+        res.status(404).send({ error: `Id cart not found:  ${error}` })
     }
 }
 
 export const postCart = async (req, res) => {
     const response = await cartModel.create(req.body)
     try {
-        res.status(200).send({ result: 'OK', message: response })
+        res.status(201).send({ result: 'Cart created succesfully', message: response })
     } catch (error) {
         logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
         res.status(400).send({ error: `Cart already exist: ${error}` })
@@ -207,6 +207,6 @@ export const purchase = async (req, res) => {
         return res.status(200).send({ message: "Successful purchase" })
     } catch (error) {
         logger.error(`[ERROR] - Date: ${new Date().toLocaleTimeString()} - ${error.message}`)
-        return res.status(404).send({ error: `Error processing the purchase: ${error.message}` })
+        return res.status(500).send({ error: `Error processing the purchase: ${error.message}` })
     }
 }

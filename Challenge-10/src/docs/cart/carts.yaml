@@ -13,14 +13,14 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/cart"
-        '400':
+        '500':
           description: Error displaying carts
     post:
       summary: Create new cart
       tags:
         - Carts
       responses:
-        '200':
+        '201':
           description: Cart successfully created
           content:
             application/json:
@@ -52,30 +52,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/cart"
-        '400':
-          description: Id cart not found
-    put:
-      summary: Put cart by id
-      tags:
-        - Carts by id
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            $type: String
-          description: Cart id
-      responses:
-        '200':
-          description: Cart updated successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/cart"
-        '400':
-          description: Error updating cart
         '404':
           description: Id cart not found
     delete:
@@ -102,6 +78,32 @@ paths:
           description: Error emptying cart
         '404':
           description: Id cart not found
+
+  /api/carts/{cid}:
+    put:
+      summary: Put cart by cid
+      tags:
+        - Carts by cid
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Cart cid
+      responses:
+        '200':
+          description: Cart updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/cart"        
+        '404':
+          description: Id cart not found
+        '500':
+          description: Error updating cart
 
 components:
   schemas:
