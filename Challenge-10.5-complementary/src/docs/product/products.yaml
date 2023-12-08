@@ -1,0 +1,149 @@
+paths:
+  /api/products/:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Products successfully obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"
+        '404':
+          description: Products not found
+        '500':
+          description: Internal server error, error displaying products
+    post:
+      summary: Create new product
+      tags:
+        - Products
+      responses:
+        '201':
+          description: Product successfully created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"
+        '409':
+          description: Error, duplicated key
+        '500':
+          description: Internal server error, unable to create product
+
+  /api/products/{id}:
+    get:
+      summary: Get product by id
+      tags:
+        - Products by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Product id
+      responses:
+        '200':
+          description: Product successfully obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"
+        '404':
+          description: Id product not found
+        '500':
+          description: Internal server error, error displaying product
+    put:
+      summary: Put product by id
+      tags:
+        - Products by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Product id
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"        
+        '404':
+          description: Id product not found
+        '500':
+          description: Internal server error, error updating product
+    delete:
+      summary: Delete product by id
+      tags:
+        - Products by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $type: String
+          description: Product id
+      responses:
+        '200':
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"        
+        '404':
+          description: Id product not found
+        '500':
+          description: Internal server error, error deleting product
+
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Auto-generated mongodb ID
+        title:
+          type: String
+          description: Product name
+        description:
+          type: String
+          description: Product description
+        price:
+          type: Number
+          description: Product price
+        stock:
+          type: Number
+          description: Product stock
+        thumbnails:
+          type: Array
+          description: Product image
+        code:
+          type: String
+          description: Product code
+        category:
+          type: String
+          description: Product category
+      example:
+        _id: ObjectId('31a3123f2313e')
+        title: Rice
+        description: Rich
+        price: 3
+        stock: 654
+        thumbnail: "https://cdn-icons-png.flaticon.com/512/5157/5157686.png"
+        code: rice1234
+        category: "food"
