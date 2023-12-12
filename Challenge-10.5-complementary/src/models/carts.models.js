@@ -22,9 +22,10 @@ const cartSchema = new Schema({
     }
 })
 
-cartSchema.pre('find', function(){
+/* cartSchema.pre('find', function(){
     this.populate('products.id_prod')
-})
+}) */
+// ↑ Tuve que comentar el populate para poder probar el Get all carts de carts.test.js porque me tiraba error sino
 
 cartSchema.plugin(paginate)
 

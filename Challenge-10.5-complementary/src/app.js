@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
 });
 
 //MongoDB Atlas connection
-mongoose
+await mongoose
     .connect(process.env.MONGO_URL)
     .then(async () => {
         logger.info("MongoDB connected");

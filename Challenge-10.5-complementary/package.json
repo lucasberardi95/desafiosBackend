@@ -5,7 +5,12 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "testCarts": "mocha test/carts.test.js",
+    "testCartsChai": "mocha test/cartsChai.test.js",
+    "testProducts": "mocha test/products.test.js",
+    "testSessions": "mocha test/sessions.test.js"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +41,9 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
   }
 }
