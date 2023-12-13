@@ -15,19 +15,54 @@ const expect = chai.expect
 const requester = supertest('http://localhost:4000')
 
 describe('App tests', () => {
-    describe('User register tests', async function () {
-        it('Endpoint test /api/users, a new user is expected to be created', async function () {
-            const newUser = {
-				first_name: 'User',
-				last_name: 'Test',
-				email: 'user@test.com',
-				age: 1234,
-				password: '1234'
-			}
+    let token = ''
 
-            const { ok, _body} = requester.post('/api/users').send(newUser)
-            logger.info(ok)
-            logger.info(_body)
-        })
-    })
-})
+    it('Endpoint test /api/users/signin, a new user is expected to be created', async function () {
+        this.timeout(7000)
+        const newUser = {
+            first_name: 'User',
+            last_name: 'Test',
+            email: 'user@test.com',
+            age: 1234,
+            password: '1234'
+        };
+
+        const { __body, status } = await requester.post('/api/users/signin').send(newUser);
+
+        //expect(status).to.equal(200);
+        expect(status).to.equal(302); //Puse codigo 302 porque al registrarse hace una redireccion a la vista de login
+        logger.info(`Status: ${__body}`);
+    });
+
+    it('Endpoint test /api/sessions/login, a user is expected to log in', async function () {
+        this.timeout(7000)
+
+        const newUser = {
+            email: 'user@test.com',
+            password: '1234'
+        };
+
+        const response = await requester.post('/api/sessions/login').send(newUser);
+        const tokenResult = response.header['jwt-cookie'][0];
+
+        expect(tokenResult).to.be.ok;
+        expect(response.status).to.be.equal(200);
+
+        token = {
+            name: tokenResult.split('=')[0],
+            value: tokenResult.split('=')[1]
+        };
+
+        expect(token).to.be.ok;
+        expect(token.name).to.be.ok.and.equal('jwtCookie');
+
+        logger.info(`Token: ${token.name} = ${token.value}`);
+    });
+
+    it('Endpoint test /api/sessions/current, it is expected to get the current user', async function () {
+        const { statusCode, ok } = await requester
+            .get('api/sessions/current')
+            .set('Cookie', [`jwtCookie=${token}`]);
+        console.log(statusCode, ok);
+    });
+});
