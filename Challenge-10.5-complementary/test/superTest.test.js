@@ -15,7 +15,7 @@ const expect = chai.expect
 const requester = supertest('http://localhost:4000')
 
 describe('App tests', () => {
-    let token = ''
+    let token = {}
 
     it('Endpoint test /api/users/signin, a new user is expected to be created', async function () {
         this.timeout(7000)
@@ -43,10 +43,10 @@ describe('App tests', () => {
         };
 
         const response = await requester.post('/api/sessions/login').send(newUser);
-        const tokenResult = response.header['jwt-cookie'][0];
+        const tokenResult = response.header['set-cookie'][0];
 
         expect(tokenResult).to.be.ok;
-        expect(response.status).to.be.equal(200);
+        expect(response.status).to.be.equal(302);//status(302) de nuevo por ser redirect
 
         token = {
             name: tokenResult.split('=')[0],
@@ -61,8 +61,8 @@ describe('App tests', () => {
 
     it('Endpoint test /api/sessions/current, it is expected to get the current user', async function () {
         const { statusCode, ok } = await requester
-            .get('api/sessions/current')
-            .set('Cookie', [`jwtCookie=${token}`]);
+            .get('/api/sessions/current')
+            .set('Cookie', [`jwtCookie=${token.value}`]);
         console.log(statusCode, ok);
     });
 });
