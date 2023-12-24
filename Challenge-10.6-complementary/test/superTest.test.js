@@ -99,42 +99,46 @@ describe('App tests', () => {
         })
         productId = newProduct._id
         const quantity = 1 
-        console.log('Cart ID:', cid);
-        console.log('Product ID:', productId);
-        console.log('Token:', token);
 
         /* await requester.post(`/api/carts/${cid}/product/${productId}`).set('Cookie', [`${token.name} = ${token.value}`]) TO ADD TWICE THE SAME PRODUCT */ 
-        const { __body, status } = await requester
+        const { status } = await requester
         .put(`/api/carts/${cid}/product/${productId}`)
         .send({ quantity })
         .set('Cookie', [`${token.name} = ${token.value}`])
 
-        console.log('Response Status:', status);
-        console.log('Response Body:', __body);
+        logger.info(`Status: ${status}`);
 
         expect(status).to.equal(200)
 
         logger.info('Product added succesfully')
-        logger.info(`Product: ${__body}`)
+        const productData = newProduct.toJSON()
+        logger.info(`Product: `, productData)
     })
 
     it('Endpoint test /api/carts/:cid/products/:pid, it is expected to modify the quantity of a product in the cart', async function () {
         const cid = cartId
         const newQty = { quantity : 20 }
         
-        const { __body, status } = await requester
+        const { status } = await requester
         .put(`/api/carts/${cid}/products/${productId}`)
         .send(newQty)
         .set('Cookie', [`${token.name} = ${token.value}`])
 
         expect(status).to.equal(200)
-        logger.info('Updated product qty')
-        logger.info(`Status: ${__body}`)
+
+        const updatedCart = await cartModel.findById(cid)
+        const updatedProduct = updatedCart.products.find(product => product.id_prod.toString() === productId.toString())
+        if(updatedProduct){
+            logger.info(`Product qty successfully updated, new qty: ${updatedProduct.quantity}`)
+        }else {
+            logger.error('Product not found in the updated cart.');
+        }
+        logger.info(`Status: ${status}`)
     })
 
     it('Endpoint test /api/users/deleteOne/:id, it is expected to delete an user', async function () {
 
-        const { __body, status } = await requester
+        const { status } = await requester
         .delete(`/api/users/deleteOne/${userId}`)
         .set('Cookie', [`${token.name} = ${token.value}`])
 
@@ -144,7 +148,7 @@ describe('App tests', () => {
 
         expect(status).to.equal(200)
         logger.info('User deleted succesfully')
-        logger.info(`Status: ${__body}`)
+        logger.info(`Status: ${status}`)
 
         async function deleteCart(userId) {
             const user = await userModel.findById(userId)
