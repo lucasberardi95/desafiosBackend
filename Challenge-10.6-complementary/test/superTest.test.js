@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import { logger } from '../src/utils/logger.js'
 import { userModel } from '../src/models/users.models.js'
 import productModel from '../src/models/products.models.js'
+import cartModel from '../src/models/carts.models.js'
 
 await mongoose
     .connect(process.env.MONGO_URL)
@@ -20,6 +21,7 @@ describe('App tests', () => {
     let token = {}
     let cartId = ''
     let userId = ''
+    let productId = ''
     const newUser = {
         first_name: 'User',
         last_name: 'Test',
@@ -54,15 +56,14 @@ describe('App tests', () => {
     it('Endpoint test /api/sessions/login, a user is expected to log in', async function () {
         this.timeout(7000)
 
-        const response = await requester
+        const { status, header} = await requester
         .post('/api/sessions/login')
         .send(newUser);
-        const { __body } = response;
-        const tokenResult = response.header['set-cookie'][0];
+        const tokenResult = header['set-cookie'][0];
 
         expect(tokenResult).to.be.ok;
-        expect(response.status).to.be.equal(302);//status(302) de nuevo por ser redirect
-        logger.info('Login status: ', response.status);
+        expect(status).to.be.equal(302);//status(302) de nuevo por ser redirect
+        logger.info(`Login status: ${status}`);
         token = {
             name: tokenResult.split('=')[0],
             value: tokenResult.split('=')[1]
@@ -86,7 +87,7 @@ describe('App tests', () => {
         logger.info(`Token: ${token.name} = ${token.value}`);
     });
 
-    it('Endpoint test /api/carts/cid/product/pid, a product is expected to be added to the cart', async function () {
+    it('Endpoint test /api/carts/:cid/product/:pid, a product is expected to be added to the cart', async function () {
         const cid = cartId
         const newProduct = await productModel.create({
             title:"test product",
@@ -96,15 +97,15 @@ describe('App tests', () => {
             category:"testing",
             code:`test${Math.random().toString(36).substring(7)}`
         })
-        const pid = newProduct._id
+        productId = newProduct._id
         const quantity = 1 
         console.log('Cart ID:', cid);
-        console.log('Product ID:', pid);
+        console.log('Product ID:', productId);
         console.log('Token:', token);
 
-        /* await requester.post(`/api/carts/${cid}/product/${pid}`).set('Cookie', [`${token.name} = ${token.value}`]) TO ADD TWICE THE SAME PRODUCT */ 
+        /* await requester.post(`/api/carts/${cid}/product/${productId}`).set('Cookie', [`${token.name} = ${token.value}`]) TO ADD TWICE THE SAME PRODUCT */ 
         const { __body, status } = await requester
-        .put(`/api/carts/${cid}/product/${pid}`)
+        .put(`/api/carts/${cid}/product/${productId}`)
         .send({ quantity })
         .set('Cookie', [`${token.name} = ${token.value}`])
 
@@ -117,13 +118,12 @@ describe('App tests', () => {
         logger.info(`Product: ${__body}`)
     })
 
-    it('Endpoint test /api/carts/cid/products/pid, it is expected to modify the quantity of a product in the cart', async function () {
-        const cid = '6582f9ce41fda5676222140a'
-        const pid = '6582ffb63b1b5467d598efb5'
+    it('Endpoint test /api/carts/:cid/products/:pid, it is expected to modify the quantity of a product in the cart', async function () {
+        const cid = cartId
         const newQty = { quantity : 20 }
         
         const { __body, status } = await requester
-        .put(`/api/carts/${cid}/products/${pid}`)
+        .put(`/api/carts/${cid}/products/${productId}`)
         .send(newQty)
         .set('Cookie', [`${token.name} = ${token.value}`])
 
@@ -132,13 +132,30 @@ describe('App tests', () => {
         logger.info(`Status: ${__body}`)
     })
 
-    it('Endpoint test /api/user/uid, it is expected to delete an user', async function () {
-        const uid = userId
-        
-        const { __body, status } = await requester.delete(`/api/users/${uid}`).set('Cookie', [`${token.name} = ${token.value}`])
+    it('Endpoint test /api/users/deleteOne/:id, it is expected to delete an user', async function () {
+
+        const { __body, status } = await requester
+        .delete(`/api/users/deleteOne/${userId}`)
+        .set('Cookie', [`${token.name} = ${token.value}`])
+
+        if (status === 200){
+            await deleteCart(userId)
+        }
 
         expect(status).to.equal(200)
         logger.info('User deleted succesfully')
         logger.info(`Status: ${__body}`)
+
+        async function deleteCart(userId) {
+            const user = await userModel.findById(userId)
+            if (user) {
+                const cartId = user.cart
+    
+                if (cartId) {
+                    await cartModel.findByIdAndDelete(cartId)
+                    logger.info('Cart deleted successfully')
+                }
+            }
+        }
     })
 });

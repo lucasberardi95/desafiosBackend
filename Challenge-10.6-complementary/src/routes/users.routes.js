@@ -9,6 +9,7 @@ import crypto from 'crypto'
 import { logger } from "../utils/logger.js"
 import { createHash, validatePassword } from "../utils/bcrypt.js"
 import { userModel } from "../models/users.models.js"
+import { authorization, passportError } from "../utils/errorMessages.js"
 
 const userRouter = Router()
 const recoveryLinks = {}
@@ -90,5 +91,7 @@ userRouter.post('/reset-password/:token', async (req, res) => {
         res.status(500).send(`Error changing password: ${error}`)
     }
 })
+
+userRouter.delete('/deleteOne/:id', passportError('jwt'), authorization(['user', 'admin']), userController.deleteUser)
 
 export default userRouter
